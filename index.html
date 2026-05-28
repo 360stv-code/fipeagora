@@ -324,39 +324,50 @@ async function carregarAnosPorMarca(){
   selModelo.disabled=true;selModelo.innerHTML='<option>Selecione o ano</option>';
   document.getElementById('btn-consultar').disabled=true;
   try{
+    // Busca todos os modelos da marca
     const r=await fetch(`${API}/${tipo}/marcas/${marca}/modelos`);
     const data=await r.json();
     _todosModelos=data.modelos;
-    // Extrai anos únicos dos nomes dos modelos
-    const anosSet=new Set();
-    _todosModelos.forEach(m=>{
-      const match=m.nome.match(/(19|20)[0-9][0-9]/);
-      if(match)anosSet.add(match[0]);
-    });
-    const anos=[...anosSet].sort((a,b)=>Number(b)-Number(a));
-    if(anos.length>0){
-      selAno.innerHTML='<option value="">Selecione o ano</option>'+anos.map(a=>`<option value="${a}">${a}</option>`).join('');
-    } else {
-      // Marca sem ano no nome (ex: BMW importada) — busca anos via API do primeiro modelo
-      const rAnos=await fetch(`${API}/${tipo}/marcas/${marca}/modelos/${_todosModelos[0].codigo}/anos`);
-      const anosData=await rAnos.json();
-      const anosUnicos=[...new Set(anosData.map(a=>a.nome.replace(/ .*/,'')))].sort((a,b)=>Number(b)-Number(a));
-      selAno.innerHTML='<option value="">Selecione o ano</option>'+anosUnicos.map(a=>`<option value="${a}">${a}</option>`).join('');
-    }
+    // Busca anos reais do primeiro modelo para ter lista atualizada
+    const rAnos=await fetch(`${API}/${tipo}/marcas/${marca}/modelos/${_todosModelos[0].codigo}/anos`);
+    const anosData=await rAnos.json();
+    // anos vêm como "2026 Gasolina" — pega só o número
+    const anosUnicos=[...new Set(anosData.map(a=>a.nome.split(' ')[0]))].sort((a,b)=>Number(b)-Number(a));
+    selAno.innerHTML='<option value="">Selecione o ano</option>'+anosUnicos.map(a=>`<option value="${a}">${a}</option>`).join('');
     selAno.disabled=false;
   }catch(e){selAno.innerHTML='<option>Erro ao carregar</option>';}
 }
 
-function filtrarModelos(){
+async function filtrarModelos(){
+  const tipo=document.getElementById('tipo').value;
+  const marca=document.getElementById('marca').value;
   const ano=document.getElementById('ano').value;
   if(!ano)return;
   const sel=document.getElementById('modelo');
-  let filtrados=_todosModelos.filter(m=>m.nome.includes(ano));
-  if(filtrados.length===0)filtrados=_todosModelos;
-  sel.innerHTML='<option value="">Selecione o modelo</option>'+filtrados.map(m=>`<option value="${m.codigo}">${m.nome}</option>`).join('');
-  sel.disabled=false;
-  sel.onchange=()=>{document.getElementById('btn-consultar').disabled=!sel.value};
+  sel.disabled=true;sel.innerHTML='<option>Buscando modelos...</option>';
   document.getElementById('btn-consultar').disabled=true;
+  try{
+    // Para cada modelo verifica se tem o ano selecionado
+    const modelosComAno=[];
+    // Busca em paralelo (máx 10 por vez para não sobrecarregar)
+    const lote=_todosModelos.slice(0,Math.min(_todosModelos.length,200));
+    const checks=await Promise.all(lote.map(async m=>{
+      try{
+        const r=await fetch(`${API}/${tipo}/marcas/${marca}/modelos/${m.codigo}/anos`);
+        const anos=await r.json();
+        const temAno=anos.some(a=>a.nome.startsWith(ano));
+        return temAno?m:null;
+      }catch{return null;}
+    }));
+    const filtrados=checks.filter(Boolean);
+    if(filtrados.length>0){
+      sel.innerHTML='<option value="">Selecione o modelo</option>'+filtrados.map(m=>`<option value="${m.codigo}">${m.nome}</option>`).join('');
+    } else {
+      sel.innerHTML='<option value="">Selecione o modelo</option>'+_todosModelos.map(m=>`<option value="${m.codigo}">${m.nome}</option>`).join('');
+    }
+    sel.disabled=false;
+    sel.onchange=()=>{document.getElementById('btn-consultar').disabled=!sel.value};
+  }catch(e){sel.innerHTML='<option>Erro ao carregar</option>';}
 }
 
 async function consultarFipe(){
