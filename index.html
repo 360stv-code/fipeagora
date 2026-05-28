@@ -248,17 +248,7 @@ footer strong{color:var(--ink2)}
       <div class="resultado" id="resultado-modelo"></div>
     </div>
 
-    <!-- FORM PLACA -->
-    <div class="form-card" id="form-placa" style="display:none">
-      <div class="placa-wrap">
-        <input class="placa-input" id="placa-input" type="text" maxlength="7" placeholder="ABC1D23" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" oninput="formatarPlaca(this)" onkeydown="if(event.key==='Enter')consultarPorPlaca()">
-        <div class="placa-hint">Formato antigo (ABC-1234) ou Mercosul (ABC1D23)</div>
-      </div>
-      <button class="btn-consultar" onclick="consultarPorPlaca()">CONSULTAR POR PLACA</button>
-      <div class="loading" id="loading-placa"><span class="spinner"></span>Identificando veículo...</div>
-      <div class="error-msg" id="error-placa"></div>
-      <div class="resultado" id="resultado-placa"></div>
-    </div>
+
   </div>
 
   <div class="stats">
@@ -304,12 +294,7 @@ footer strong{color:var(--ink2)}
 <script>
 const API='https://parallelum.com.br/fipe/api/v1';
 
-function switchTab(tab,el){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('form-modelo').style.display=tab==='modelo'?'block':'none';
-  document.getElementById('form-placa').style.display=tab==='placa'?'block':'none';
-}
+
 
 
 
@@ -400,22 +385,10 @@ async function consultarFipe(){
     const r=await fetch(`${API}/${tipo}/marcas/${marca}/modelos/${modelo}/anos/${anoCode}`);
     const d=await r.json();
     setLoading('modelo',false);
-    renderResultado('modelo',d,null);
+    renderResultado('modelo',d);
   }catch(e){setLoading('modelo',false);setError('modelo','Não foi possível buscar os dados. Tente novamente.');}
 }
 
-
-  setLoading('placa',true);setError('placa','');
-  document.getElementById('resultado-placa').classList.remove('show');
-  try{
-    const r=await fetch(`https://brasilapi.com.br/api/fipe/preco/v1/${placa}`);
-    if(!r.ok)throw new Error();
-    const data=await r.json();
-    setLoading('placa',false);
-    if(data&&data.length>0){renderResultado('placa',data[0],placa);}
-    else{setError('placa','Não conseguimos identificar essa placa. Use a aba "Por marca/modelo" acima — é rápido e tem todos os veículos! 👆');}
-  }catch(e){setLoading('placa',false);setError('placa','Não conseguimos identificar essa placa automaticamente. Use a aba "Por marca/modelo" para consultar — é rápido e tem todos os veículos! 👆');}
-}
 
 function renderResultado(id,d){
   const placa=null;
