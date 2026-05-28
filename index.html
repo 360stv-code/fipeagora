@@ -396,5 +396,36 @@ function toggleFaq(el){el.parentElement.classList.toggle('open')}
 
 carregarMarcas();
 </script>
+<!-- BANNER COOKIES LGPD -->
+<div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#1A1A1A;border-top:1px solid rgba(255,255,255,0.1);padding:16px 20px;font-family:'Outfit',sans-serif">
+  <div style="max-width:1000px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+    <div style="font-size:13px;color:rgba(255,255,255,0.65);line-height:1.5;flex:1;min-width:240px">
+      🍪 Usamos cookies para analytics e anúncios. Ao continuar você concorda com nossa 
+      <a href="/privacidade.html" style="color:#E8FF47;text-decoration:none">Política de Privacidade</a>.
+    </div>
+    <div style="display:flex;gap:8px;flex-shrink:0">
+      <button onclick="recusarCookies()" style="height:38px;padding:0 16px;background:transparent;border:1px solid rgba(255,255,255,0.2);border-radius:8px;font-family:'Outfit',sans-serif;font-size:13px;color:rgba(255,255,255,0.5);cursor:pointer">Recusar</button>
+      <button onclick="aceitarCookies()" style="height:38px;padding:0 20px;background:#E8FF47;border:none;border-radius:8px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;color:#000;cursor:pointer">Aceitar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// COOKIES LGPD
+function initCookieBanner(){
+  if(!localStorage.getItem('cookie_consent')){
+    document.getElementById('cookie-banner').style.display='block';
+  }
+}
+function aceitarCookies(){
+  localStorage.setItem('cookie_consent','accepted');
+  document.getElementById('cookie-banner').style.display='none';
+}
+function recusarCookies(){
+  localStorage.setItem('cookie_consent','refused');
+  document.getElementById('cookie-banner').style.display='none';
+}
+initCookieBanner();
+</script>
 </body>
 </html>
