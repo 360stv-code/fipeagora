@@ -349,8 +349,8 @@ async function consultarPorPlaca(){
     const data=await r.json();
     setLoading('placa',false);
     if(data&&data.length>0){renderResultado('placa',data[0],placa);}
-    else{setError('placa','Veículo não encontrado. Tente consultar por marca/modelo.');}
-  }catch(e){setLoading('placa',false);setError('placa','Placa não encontrada na base FIPE. Tente por marca/modelo.');}
+    else{setError('placa','Não conseguimos identificar essa placa. Use a aba "Por marca/modelo" acima — é rápido e tem todos os veículos! 👆');}
+  }catch(e){setLoading('placa',false);setError('placa','Não conseguimos identificar essa placa automaticamente. Use a aba "Por marca/modelo" para consultar — é rápido e tem todos os veículos! 👆');}
 }
 
 function renderResultado(id,d,placa){
