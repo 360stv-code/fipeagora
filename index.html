@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FIPE Agora — Consulta Tabela FIPE Atualizada Maio 2026</title>
+<meta name="description" content="Consulte a Tabela FIPE atualizada em maio de 2026. Preço médio de carros, motos e caminhões por marca, modelo e ano. Grátis, rápido e sem cadastro.">
+<meta name="keywords" content="tabela fipe, consulta fipe, fipe 2026, preço carro fipe, fipe placa, valor fipe, tabela fipe carros, tabela fipe motos">
+<link rel="canonical" href="https://fipeagora.com.br/">
+<meta property="og:title" content="FIPE Agora — Consulta Tabela FIPE Atualizada">
+<meta property="og:description" content="Descubra o valor FIPE do seu veículo em segundos. Tabela atualizada maio 2026.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://fipeagora.com.br/">
+<meta property="og:locale" content="pt_BR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="robots" content="index, follow">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"FIPE Agora","url":"https://fipeagora.com.br","description":"Consulta gratuita da Tabela FIPE atualizada. Preço médio de carros, motos e caminhões no Brasil.","applicationCategory":"AutomotiveApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"BRL"},"inLanguage":"pt-BR"}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0C0C0C;
+  --surface:#161616;
+  --surface2:#1F1F1F;
+  --border:rgba(255,255,255,0.08);
+  --border2:rgba(255,255,255,0.04);
+  --ink:#FFFFFF;
+  --ink2:rgba(255,255,255,0.55);
+  --ink3:rgba(255,255,255,0.25);
+  --accent:#E8FF47;
+  --accent-dark:#1A1E00;
+  --radius:14px;
+  --radius-sm:9px;
+  --font-head:'Bebas Neue',sans-serif;
+  --font-body:'Outfit',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--bg);color:var(--ink);min-height:100vh;overflow-x:hidden;-webkit-text-size-adjust:100%}
+
+/* HEADER */
+header{padding:0 16px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;background:rgba(12,12,12,0.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.header-inner{max-width:1000px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:52px}
+.logo{font-family:var(--font-head);font-size:20px;letter-spacing:0.05em}
+.logo span{color:var(--accent)}
+.badge{font-size:11px;font-weight:500;background:var(--accent);color:#000;padding:3px 10px;border-radius:20px;white-space:nowrap}
+
+/* HERO */
+.hero{padding:40px 16px 0;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;width:400px;height:400px;background:radial-gradient(circle,rgba(232,255,71,0.07) 0%,transparent 65%);top:-100px;left:50%;transform:translateX(-50%);pointer-events:none}
+.hero-inner{max-width:680px;margin:0 auto;position:relative}
+.hero-eyebrow{font-size:11px;font-weight:500;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:16px}
+.hero h1{font-family:var(--font-head);font-size:clamp(48px,12vw,88px);line-height:0.92;letter-spacing:0.02em;margin-bottom:14px}
+.hero h1 em{font-style:normal;color:var(--accent);display:block}
+.hero p{font-size:15px;color:var(--ink2);font-weight:300;max-width:360px;margin:0 auto 32px;line-height:1.6}
+
+/* TABS */
+.tabs{display:flex;gap:4px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:4px;max-width:340px;margin:0 auto 24px}
+.tab{flex:1;padding:10px 0;font-family:var(--font-body);font-size:13px;font-weight:500;border:none;border-radius:var(--radius-sm);cursor:pointer;transition:all 0.2s;background:transparent;color:var(--ink2);-webkit-tap-highlight-color:transparent}
+.tab.active{background:var(--accent);color:#000}
+
+/* FORM CARD */
+.form-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 16px;max-width:680px;margin:0 auto}
+
+/* SELECTS — mobile first: 1 coluna, desktop: 3 colunas */
+.selects-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:16px}
+.field label{font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:0.07em;display:block;margin-bottom:7px}
+select{width:100%;height:52px;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:16px;font-weight:500;color:var(--ink);padding:0 40px 0 14px;outline:none;cursor:pointer;transition:border-color 0.2s;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(255,255,255,0.3)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;-webkit-tap-highlight-color:transparent}
+select:focus{border-color:var(--accent)}
+select:disabled{opacity:0.35;cursor:not-allowed}
+
+/* BTN */
+.btn-consultar{width:100%;height:56px;background:var(--accent);color:#000;border:none;border-radius:var(--radius-sm);font-family:var(--font-head);font-size:22px;letter-spacing:0.05em;cursor:pointer;transition:all 0.15s;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.btn-consultar:active{transform:scale(0.98);background:#d4eb3a}
+.btn-consultar:disabled{opacity:0.35;cursor:not-allowed;transform:none}
+
+/* PLACA */
+.placa-wrap{max-width:280px;margin:0 auto 20px}
+.placa-input{width:100%;height:68px;background:var(--surface2);border:2px solid var(--border);border-radius:var(--radius);font-family:var(--font-head);font-size:32px;letter-spacing:0.15em;text-align:center;color:var(--ink);text-transform:uppercase;transition:border-color 0.2s;outline:none;-webkit-tap-highlight-color:transparent}
+.placa-input:focus{border-color:var(--accent)}
+.placa-hint{font-size:12px;color:var(--ink3);text-align:center;margin-top:8px}
+
+/* LOADING */
+.loading{display:none;text-align:center;padding:16px;color:var(--ink2);font-size:14px}
+.loading.show{display:block}
+.spinner{display:inline-block;width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite;margin-right:8px;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ERROR */
+.error-msg{display:none;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:var(--radius-sm);padding:12px 16px;font-size:13px;color:#f87171;margin-top:12px;text-align:center}
+.error-msg.show{display:block}
+
+/* RESULTADO */
+.resultado{display:none;margin-top:20px;animation:fadeUp 0.35s ease}
+.resultado.show{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.res-divider{border:none;border-top:1px solid rgba(255,255,255,0.07);margin-bottom:18px}
+.res-placa-tag{font-size:11px;color:var(--accent);font-weight:600;letter-spacing:0.1em;margin-bottom:10px}
+.res-marca{font-size:13px;color:var(--ink2);margin-bottom:4px}
+.res-nome{font-family:var(--font-head);font-size:clamp(22px,6vw,32px);letter-spacing:0.02em;line-height:1.1;margin-bottom:12px}
+.res-valor-bloco{background:var(--accent-dark);border:1px solid rgba(232,255,71,0.2);border-radius:var(--radius-sm);padding:16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.res-valor-label{font-size:11px;color:rgba(232,255,71,0.6);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:4px}
+.res-valor{font-family:var(--font-head);font-size:clamp(28px,8vw,40px);color:var(--accent);letter-spacing:0.02em;line-height:1}
+.res-ref{font-size:11px;color:var(--ink3);margin-top:4px}
+.res-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.res-item{background:var(--surface2);border-radius:var(--radius-sm);padding:12px}
+.res-item-label{font-size:10px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px}
+.res-item-val{font-size:14px;font-weight:600;color:var(--ink)}
+.ipva-card{background:rgba(232,255,71,0.05);border:1px solid rgba(232,255,71,0.15);border-radius:var(--radius-sm);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.ipva-text{font-size:12px;color:var(--ink2)}
+.ipva-val{font-family:var(--font-head);font-size:22px;color:var(--accent)}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border-radius:var(--radius);overflow:hidden;max-width:680px;margin:40px auto 0}
+.stat{background:var(--bg);padding:18px 12px;text-align:center}
+.stat-num{font-family:var(--font-head);font-size:clamp(24px,5vw,34px);color:var(--accent)}
+.stat-label{font-size:11px;color:var(--ink3);margin-top:3px}
+
+/* FAQ */
+.faq-section{max-width:680px;margin:56px auto 0;padding:0 16px}
+.faq-h2{font-family:var(--font-head);font-size:clamp(28px,7vw,44px);color:var(--ink);margin-bottom:24px;letter-spacing:0.02em}
+.faq-item{border-bottom:1px solid var(--border);padding:16px 0}
+.faq-q{font-size:15px;font-weight:500;color:var(--ink);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;user-select:none;-webkit-tap-highlight-color:transparent;line-height:1.4}
+.faq-q::after{content:'+';font-size:22px;color:var(--ink3);flex-shrink:0;transition:transform 0.2s}
+.faq-item.open .faq-q::after{transform:rotate(45deg)}
+.faq-a{font-size:14px;color:var(--ink2);line-height:1.7;max-height:0;overflow:hidden;transition:max-height 0.3s ease,padding 0.2s}
+.faq-item.open .faq-a{max-height:300px;padding-top:12px}
+
+/* FOOTER */
+footer{margin-top:64px;border-top:1px solid var(--border);padding:24px 16px;text-align:center;font-size:12px;color:var(--ink3);line-height:1.7}
+footer strong{color:var(--ink2)}
+
+/* DESKTOP — a partir de 600px abre grid de selects */
+@media(min-width:600px){
+  .hero{padding:56px 24px 0}
+  .form-card{padding:28px 24px}
+  .selects-grid{grid-template-columns:1fr 1fr 1fr}
+  .selects-grid.two{grid-template-columns:1fr 1fr;max-width:340px}
+  select{font-size:14px;height:48px}
+  .btn-consultar{height:52px;font-size:20px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">FIPE<span>AGORA</span></div>
+    <span class="badge">Maio 2026</span>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Tabela FIPE · Maio 2026</div>
+    <h1>Valor FIPE<em>na hora.</em></h1>
+    <p>Preço médio de carros, motos e caminhões. Dados oficiais atualizados todo mês.</p>
+
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('modelo',this)">Por marca/modelo</button>
+      <button class="tab" onclick="switchTab('placa',this)">Por placa</button>
+    </div>
+
+    <!-- FORM MODELO -->
+    <div class="form-card" id="form-modelo">
+      <div class="selects-grid">
+        <div class="field">
+          <label for="tipo">Tipo de veículo</label>
+          <select id="tipo" onchange="carregarMarcas()">
+            <option value="carros">Carros</option>
+            <option value="motos">Motos</option>
+            <option value="caminhoes">Caminhões</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="marca">Marca</label>
+          <select id="marca" onchange="carregarModelos()" disabled>
+            <option value="">Selecione o tipo</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="modelo">Modelo</label>
+          <select id="modelo" onchange="carregarAnos()" disabled>
+            <option value="">Selecione a marca</option>
+          </select>
+        </div>
+      </div>
+      <div class="selects-grid two" style="margin-bottom:16px">
+        <div class="field">
+          <label for="ano">Ano</label>
+          <select id="ano" disabled>
+            <option value="">Selecione o modelo</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn-consultar" id="btn-consultar" onclick="consultarFipe()" disabled>CONSULTAR FIPE</button>
+      <div class="loading" id="loading-modelo"><span class="spinner"></span>Buscando na base FIPE...</div>
+      <div class="error-msg" id="error-modelo"></div>
+      <div class="resultado" id="resultado-modelo"></div>
+    </div>
+
+    <!-- FORM PLACA -->
+    <div class="form-card" id="form-placa" style="display:none">
+      <div class="placa-wrap">
+        <input class="placa-input" id="placa-input" type="text" maxlength="7" placeholder="ABC1D23" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" oninput="formatarPlaca(this)" onkeydown="if(event.key==='Enter')consultarPorPlaca()">
+        <div class="placa-hint">Formato antigo (ABC-1234) ou Mercosul (ABC1D23)</div>
+      </div>
+      <button class="btn-consultar" onclick="consultarPorPlaca()">CONSULTAR POR PLACA</button>
+      <div class="loading" id="loading-placa"><span class="spinner"></span>Identificando veículo...</div>
+      <div class="error-msg" id="error-placa"></div>
+      <div class="resultado" id="resultado-placa"></div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-num">7.250+</div><div class="stat-label">modelos de carros</div></div>
+    <div class="stat"><div class="stat-num">1.964+</div><div class="stat-label">modelos de motos</div></div>
+    <div class="stat"><div class="stat-num">Mai/26</div><div class="stat-label">última atualização</div></div>
+  </div>
+</section>
+
+<section class="faq-section">
+  <h2 class="faq-h2">DÚVIDAS FREQUENTES</h2>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">O que é a Tabela FIPE?</div>
+    <div class="faq-a">A Tabela FIPE é o índice de preços médios de veículos no Brasil, calculado mensalmente pela Fundação Instituto de Pesquisas Econômicas. Serve como referência para compra, venda, IPVA e seguro de carros, motos e caminhões.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">Com que frequência a Tabela FIPE é atualizada?</div>
+    <div class="faq-a">A Tabela FIPE é atualizada mensalmente. O FIPE Agora sempre exibe os dados do mês vigente, garantindo que você consulte o valor mais recente disponível.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">O valor FIPE é o preço real do carro?</div>
+    <div class="faq-a">O valor FIPE é a média nacional. O preço real pode variar conforme estado de conservação, quilometragem, opcionais, cor e região do Brasil.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">Como o IPVA é calculado com base na FIPE?</div>
+    <div class="faq-a">O IPVA é calculado aplicando a alíquota do estado (entre 1% e 4%) sobre o valor venal, que tem como base o valor FIPE. Veículos que se valorizam podem ter IPVA maior no ano seguinte.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">Posso consultar FIPE de motos e caminhões?</div>
+    <div class="faq-a">Sim. Basta selecionar "Motos" ou "Caminhões" no campo tipo de veículo antes de escolher marca e modelo.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">A consulta por placa é confiável?</div>
+    <div class="faq-a">A consulta por placa identifica marca, modelo e ano do veículo e cruza com a base FIPE oficial. É a forma mais rápida de consultar sem navegar por menus.</div>
+  </div>
+</section>
+
+<footer>
+  <strong>FIPE AGORA</strong> · fipeagora.com.br<br>
+  Dados da Tabela FIPE atualizados em Maio de 2026 · Site independente, sem vínculo com a FIPE ou órgãos governamentais.<br><span style="margin-top:8px;display:block;color:rgba(255,255,255,0.15)">Desenvolvido por <strong style="color:rgba(255,255,255,0.35)">Lisboa Solutions</strong></span>
+</footer>
+
+<script>
+const API='https://parallelum.com.br/fipe/api/v1';
+
+function switchTab(tab,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('form-modelo').style.display=tab==='modelo'?'block':'none';
+  document.getElementById('form-placa').style.display=tab==='placa'?'block':'none';
+}
+
+function formatarPlaca(el){
+  el.value=el.value.toUpperCase().replace(/[^A-Z0-9]/g,'');
+}
+
+function setLoading(id,show){document.getElementById('loading-'+id).classList.toggle('show',show)}
+function setError(id,msg){const el=document.getElementById('error-'+id);el.textContent=msg||'';el.classList.toggle('show',!!msg)}
+
+function fmtBRL(v){return'R$ '+parseFloat(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}
+
+async function carregarMarcas(){
+  const tipo=document.getElementById('tipo').value;
+  const sel=document.getElementById('marca');
+  sel.disabled=true;sel.innerHTML='<option>Carregando...</option>';
+  document.getElementById('modelo').disabled=true;document.getElementById('modelo').innerHTML='<option>Selecione a marca</option>';
+  document.getElementById('ano').disabled=true;document.getElementById('ano').innerHTML='<option>Selecione o modelo</option>';
+  document.getElementById('btn-consultar').disabled=true;
+  try{
+    const r=await fetch(`${API}/${tipo}/marcas`);
+    const data=await r.json();
+    sel.innerHTML='<option value="">Selecione a marca</option>'+data.map(m=>`<option value="${m.codigo}">${m.nome}</option>`).join('');
+    sel.disabled=false;
+  }catch(e){sel.innerHTML='<option>Erro ao carregar</option>';}
+}
+
+async function carregarModelos(){
+  const tipo=document.getElementById('tipo').value;
+  const marca=document.getElementById('marca').value;
+  if(!marca)return;
+  const sel=document.getElementById('modelo');
+  sel.disabled=true;sel.innerHTML='<option>Carregando...</option>';
+  document.getElementById('ano').disabled=true;document.getElementById('ano').innerHTML='<option>Selecione o modelo</option>';
+  document.getElementById('btn-consultar').disabled=true;
+  try{
+    const r=await fetch(`${API}/${tipo}/marcas/${marca}/modelos`);
+    const data=await r.json();
+    sel.innerHTML='<option value="">Selecione o modelo</option>'+data.modelos.map(m=>`<option value="${m.codigo}">${m.nome}</option>`).join('');
+    sel.disabled=false;
+  }catch(e){sel.innerHTML='<option>Erro ao carregar</option>';}
+}
+
+async function carregarAnos(){
+  const tipo=document.getElementById('tipo').value;
+  const marca=document.getElementById('marca').value;
+  const modelo=document.getElementById('modelo').value;
+  if(!modelo)return;
+  const sel=document.getElementById('ano');
+  sel.disabled=true;sel.innerHTML='<option>Carregando...</option>';
+  document.getElementById('btn-consultar').disabled=true;
+  try{
+    const r=await fetch(`${API}/${tipo}/marcas/${marca}/modelos/${modelo}/anos`);
+    const data=await r.json();
+    sel.innerHTML='<option value="">Selecione o ano</option>'+data.map(a=>`<option value="${a.codigo}">${a.nome}</option>`).join('');
+    sel.disabled=false;
+    sel.onchange=()=>{document.getElementById('btn-consultar').disabled=!sel.value};
+  }catch(e){sel.innerHTML='<option>Erro ao carregar</option>';}
+}
+
+async function consultarFipe(){
+  const tipo=document.getElementById('tipo').value;
+  const marca=document.getElementById('marca').value;
+  const modelo=document.getElementById('modelo').value;
+  const ano=document.getElementById('ano').value;
+  if(!tipo||!marca||!modelo||!ano)return;
+  setLoading('modelo',true);setError('modelo','');
+  document.getElementById('resultado-modelo').classList.remove('show');
+  try{
+    const r=await fetch(`${API}/${tipo}/marcas/${marca}/modelos/${modelo}/anos/${ano}`);
+    const d=await r.json();
+    setLoading('modelo',false);
+    renderResultado('modelo',d,null);
+  }catch(e){setLoading('modelo',false);setError('modelo','Não foi possível buscar os dados. Tente novamente.');}
+}
+
+async function consultarPorPlaca(){
+  const placa=document.getElementById('placa-input').value.trim();
+  if(placa.length<7){setError('placa','Digite uma placa válida com 7 caracteres.');return;}
+  setLoading('placa',true);setError('placa','');
+  document.getElementById('resultado-placa').classList.remove('show');
+  try{
+    const r=await fetch(`https://brasilapi.com.br/api/fipe/preco/v1/${placa}`);
+    if(!r.ok)throw new Error();
+    const data=await r.json();
+    setLoading('placa',false);
+    if(data&&data.length>0){renderResultado('placa',data[0],placa);}
+    else{setError('placa','Veículo não encontrado. Tente consultar por marca/modelo.');}
+  }catch(e){setLoading('placa',false);setError('placa','Placa não encontrada na base FIPE. Tente por marca/modelo.');}
+}
+
+function renderResultado(id,d,placa){
+  const el=document.getElementById('resultado-'+id);
+  const valorStr=d.Valor||d.valor||'';
+  const valor=parseFloat(valorStr.replace('R$ ','').replace(/\./g,'').replace(',','.'));
+  const ipva=isNaN(valor)?0:(valor*0.04);
+  const marca=d.Marca||d.marca||'';
+  const modelo=d.Modelo||d.modelo||'';
+  const ano=d.AnoModelo||d.anoModelo||'';
+  const combustivel=d.Combustivel||d.combustivel||'';
+  const codigo=d.CodigoFipe||d.codigoFipe||'';
+  const mes=d.MesReferencia||d.mesReferencia||'';
+
+  el.innerHTML=`
+    <hr class="res-divider">
+    ${placa?`<div class="res-placa-tag">PLACA ${placa}</div>`:''}
+    <div class="res-marca">${marca} · ${ano}</div>
+    <div class="res-nome">${modelo}</div>
+    <div class="res-valor-bloco">
+      <div>
+        <div class="res-valor-label">Valor FIPE</div>
+        <div class="res-valor">${valorStr}</div>
+        <div class="res-ref">${mes}</div>
+      </div>
+    </div>
+    <div class="res-grid">
+      <div class="res-item"><div class="res-item-label">Combustível</div><div class="res-item-val">${combustivel}</div></div>
+      <div class="res-item"><div class="res-item-label">Ano modelo</div><div class="res-item-val">${ano}</div></div>
+      <div class="res-item"><div class="res-item-label">Código FIPE</div><div class="res-item-val">${codigo}</div></div>
+      <div class="res-item"><div class="res-item-label">Ref. mês</div><div class="res-item-val">${mes}</div></div>
+    </div>
+    ${!isNaN(valor)&&valor>0?`
+    <div class="ipva-card">
+      <div class="ipva-text">Estimativa IPVA anual (alíquota 4% SP)</div>
+      <div class="ipva-val">${fmtBRL(ipva)}</div>
+    </div>`:''}`;
+  el.classList.add('show');
+  el.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function toggleFaq(el){el.parentElement.classList.toggle('open')}
+
+carregarMarcas();
+</script>
+</body>
+</html>
