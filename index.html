@@ -64,6 +64,8 @@
   ]
 }
 </script>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='12' fill='%230C0C0C'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-size='36' font-family='Arial Black,sans-serif' fill='%23E8FF47' font-weight='900'>F</text></svg>">
+<link rel="shortcut icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='12' fill='%230C0C0C'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-size='36' font-family='Arial Black,sans-serif' fill='%23E8FF47' font-weight='900'>F</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -206,10 +208,7 @@ footer strong{color:var(--ink2)}
     <h1>Valor FIPE<em>na hora.</em></h1>
     <p>Preço médio de carros, motos e caminhões. Dados oficiais atualizados todo mês.</p>
 
-    <div class="tabs">
-      <button class="tab active" onclick="switchTab('modelo',this)">Por marca/modelo</button>
-      <button class="tab" onclick="switchTab('placa',this)">Por placa</button>
-    </div>
+
 
     <!-- FORM MODELO -->
     <div class="form-card" id="form-modelo">
@@ -224,22 +223,22 @@ footer strong{color:var(--ink2)}
         </div>
         <div class="field">
           <label for="marca">Marca</label>
-          <select id="marca" onchange="carregarModelos()" disabled>
+          <select id="marca" onchange="carregarAnos()" disabled>
             <option value="">Selecione o tipo</option>
           </select>
         </div>
         <div class="field">
-          <label for="modelo">Modelo</label>
-          <select id="modelo" onchange="carregarAnos()" disabled>
+          <label for="ano">Ano</label>
+          <select id="ano" onchange="carregarModelos()" disabled>
             <option value="">Selecione a marca</option>
           </select>
         </div>
       </div>
       <div class="selects-grid two" style="margin-bottom:16px">
         <div class="field">
-          <label for="ano">Ano</label>
-          <select id="ano" disabled>
-            <option value="">Selecione o modelo</option>
+          <label for="modelo">Modelo</label>
+          <select id="modelo" disabled>
+            <option value="">Selecione o ano</option>
           </select>
         </div>
       </div>
@@ -312,9 +311,7 @@ function switchTab(tab,el){
   document.getElementById('form-placa').style.display=tab==='placa'?'block':'none';
 }
 
-function formatarPlaca(el){
-  el.value=el.value.toUpperCase().replace(/[^A-Z0-9]/g,'');
-}
+
 
 function setLoading(id,show){document.getElementById('loading-'+id).classList.toggle('show',show)}
 function setError(id,msg){const el=document.getElementById('error-'+id);el.textContent=msg||'';el.classList.toggle('show',!!msg)}
@@ -325,8 +322,8 @@ async function carregarMarcas(){
   const tipo=document.getElementById('tipo').value;
   const sel=document.getElementById('marca');
   sel.disabled=true;sel.innerHTML='<option>Carregando...</option>';
-  document.getElementById('modelo').disabled=true;document.getElementById('modelo').innerHTML='<option>Selecione a marca</option>';
-  document.getElementById('ano').disabled=true;document.getElementById('ano').innerHTML='<option>Selecione o modelo</option>';
+  document.getElementById('ano').disabled=true;document.getElementById('ano').innerHTML='<option>Selecione a marca</option>';
+  document.getElementById('modelo').disabled=true;document.getElementById('modelo').innerHTML='<option>Selecione o ano</option>';
   document.getElementById('btn-consultar').disabled=true;
   try{
     const r=await fetch(`${API}/${tipo}/marcas`);
@@ -336,34 +333,53 @@ async function carregarMarcas(){
   }catch(e){sel.innerHTML='<option>Erro ao carregar</option>';}
 }
 
-async function carregarModelos(){
+async function carregarAnos(){
   const tipo=document.getElementById('tipo').value;
   const marca=document.getElementById('marca').value;
   if(!marca)return;
-  const sel=document.getElementById('modelo');
+  const sel=document.getElementById('ano');
   sel.disabled=true;sel.innerHTML='<option>Carregando...</option>';
-  document.getElementById('ano').disabled=true;document.getElementById('ano').innerHTML='<option>Selecione o modelo</option>';
+  document.getElementById('modelo').disabled=true;document.getElementById('modelo').innerHTML='<option>Selecione o ano</option>';
   document.getElementById('btn-consultar').disabled=true;
   try{
     const r=await fetch(`${API}/${tipo}/marcas/${marca}/modelos`);
     const data=await r.json();
-    sel.innerHTML='<option value="">Selecione o modelo</option>'+data.modelos.map(m=>`<option value="${m.codigo}">${m.nome}</option>`).join('');
+    // Extrai anos únicos de todos os modelos
+    const anosSet=new Set();
+    data.modelos.forEach(m=>{
+      const match=m.nome.match(/(19|20)\d{2}/);
+      if(match)anosSet.add(match[0]);
+    });
+    const anos=[...anosSet].sort((a,b)=>b-a);
+    if(anos.length>0){
+      sel.innerHTML='<option value="">Selecione o ano</option>'+anos.map(a=>`<option value="${a}">${a}</option>`).join('');
+    } else {
+      // fallback: carrega modelos direto sem filtro por ano
+      window._modelos=data.modelos;
+      sel.innerHTML='<option value="todos">Todos os anos</option>';
+    }
     sel.disabled=false;
+    sel.onchange=()=>carregarModelos();
   }catch(e){sel.innerHTML='<option>Erro ao carregar</option>';}
 }
 
-async function carregarAnos(){
+async function carregarModelos(){
   const tipo=document.getElementById('tipo').value;
   const marca=document.getElementById('marca').value;
-  const modelo=document.getElementById('modelo').value;
-  if(!modelo)return;
-  const sel=document.getElementById('ano');
+  const anoFiltro=document.getElementById('ano').value;
+  if(!marca||!anoFiltro)return;
+  const sel=document.getElementById('modelo');
   sel.disabled=true;sel.innerHTML='<option>Carregando...</option>';
   document.getElementById('btn-consultar').disabled=true;
   try{
-    const r=await fetch(`${API}/${tipo}/marcas/${marca}/modelos/${modelo}/anos`);
+    const r=await fetch(`${API}/${tipo}/marcas/${marca}/modelos`);
     const data=await r.json();
-    sel.innerHTML='<option value="">Selecione o ano</option>'+data.map(a=>`<option value="${a.codigo}">${a.nome}</option>`).join('');
+    let modelos=data.modelos;
+    if(anoFiltro!=='todos'){
+      modelos=modelos.filter(m=>m.nome.includes(anoFiltro));
+    }
+    if(modelos.length===0)modelos=data.modelos;
+    sel.innerHTML='<option value="">Selecione o modelo</option>'+modelos.map(m=>`<option value="${m.codigo}">${m.nome}</option>`).join('');
     sel.disabled=false;
     sel.onchange=()=>{document.getElementById('btn-consultar').disabled=!sel.value};
   }catch(e){sel.innerHTML='<option>Erro ao carregar</option>';}
@@ -373,21 +389,22 @@ async function consultarFipe(){
   const tipo=document.getElementById('tipo').value;
   const marca=document.getElementById('marca').value;
   const modelo=document.getElementById('modelo').value;
-  const ano=document.getElementById('ano').value;
-  if(!tipo||!marca||!modelo||!ano)return;
+  if(!tipo||!marca||!modelo)return;
   setLoading('modelo',true);setError('modelo','');
   document.getElementById('resultado-modelo').classList.remove('show');
   try{
-    const r=await fetch(`${API}/${tipo}/marcas/${marca}/modelos/${modelo}/anos/${ano}`);
+    // Busca anos disponíveis para esse modelo e pega o mais recente
+    const rAnos=await fetch(`${API}/${tipo}/marcas/${marca}/modelos/${modelo}/anos`);
+    const anos=await rAnos.json();
+    const anoCode=anos[0].codigo;
+    const r=await fetch(`${API}/${tipo}/marcas/${marca}/modelos/${modelo}/anos/${anoCode}`);
     const d=await r.json();
     setLoading('modelo',false);
     renderResultado('modelo',d,null);
   }catch(e){setLoading('modelo',false);setError('modelo','Não foi possível buscar os dados. Tente novamente.');}
 }
 
-async function consultarPorPlaca(){
-  const placa=document.getElementById('placa-input').value.trim();
-  if(placa.length<7){setError('placa','Digite uma placa válida com 7 caracteres.');return;}
+
   setLoading('placa',true);setError('placa','');
   document.getElementById('resultado-placa').classList.remove('show');
   try{
@@ -400,7 +417,8 @@ async function consultarPorPlaca(){
   }catch(e){setLoading('placa',false);setError('placa','Não conseguimos identificar essa placa automaticamente. Use a aba "Por marca/modelo" para consultar — é rápido e tem todos os veículos! 👆');}
 }
 
-function renderResultado(id,d,placa){
+function renderResultado(id,d){
+  const placa=null;
   const el=document.getElementById('resultado-'+id);
   const valorStr=d.Valor||d.valor||'';
   const valor=parseFloat(valorStr.replace('R$ ','').replace(/\./g,'').replace(',','.'));
