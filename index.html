@@ -47,7 +47,7 @@
     {"@type": "Question", "name": "O que é a Tabela FIPE?", "acceptedAnswer": {"@type": "Answer", "text": "A Tabela FIPE é o índice de preços médios de veículos no Brasil, calculado mensalmente pela Fundação Instituto de Pesquisas Econômicas. Serve como referência para compra, venda, IPVA e seguro de carros, motos e caminhões."}},
     {"@type": "Question", "name": "Com que frequência a Tabela FIPE é atualizada?", "acceptedAnswer": {"@type": "Answer", "text": "A Tabela FIPE é atualizada mensalmente. O FIPE Agora sempre exibe os dados do mês vigente."}},
     {"@type": "Question", "name": "O valor FIPE é o preço real do carro?", "acceptedAnswer": {"@type": "Answer", "text": "O valor FIPE é a média nacional. O preço real pode variar conforme estado de conservação, quilometragem, opcionais, cor e região."}},
-    {"@type": "Question", "name": "Como o IPVA é calculado com base na FIPE?", "acceptedAnswer": {"@type": "Answer", "text": "O IPVA é calculado aplicando a alíquota do estado (entre 1% e 4%) sobre o valor venal baseado na Tabela FIPE. Em São Paulo a alíquota é 4% para carros de passeio."}},
+    {"@type": "Question", "name": "Como o IPVA é calculado com base na FIPE?", "acceptedAnswer": {"@type": "Answer", "text": "O IPVA é calculado aplicando a alíquota do estado sobre o valor venal baseado na Tabela FIPE. Em São Paulo a alíquota é 4% para carros de passeio, 2% para motos e utilitários e 1,5% para caminhões."}},
     {"@type": "Question", "name": "Posso consultar FIPE de motos e caminhões?", "acceptedAnswer": {"@type": "Answer", "text": "Sim. Selecione o tipo de veículo antes de escolher marca e modelo."}},
     {"@type": "Question", "name": "A consulta FIPE por placa é confiável?", "acceptedAnswer": {"@type": "Answer", "text": "A consulta por placa identifica marca, modelo e ano e cruza com a base FIPE oficial. É a forma mais rápida de consultar sem navegar por menus."}}
   ]
@@ -301,7 +301,7 @@ footer strong{color:var(--ink2)}
   </div>
   <div class="faq-item">
     <div class="faq-q" onclick="toggleFaq(this)">Como o IPVA é calculado com base na FIPE?</div>
-    <div class="faq-a">O IPVA é calculado aplicando a alíquota do estado (entre 1% e 4%) sobre o valor venal, que tem como base o valor FIPE. Veículos que se valorizam podem ter IPVA maior no ano seguinte.</div>
+    <div class="faq-a">O IPVA é calculado aplicando a alíquota do estado sobre o valor venal, que tem como base o valor FIPE. Em São Paulo as alíquotas são: 4% para carros de passeio, 2% para motos e para picapes, vans e utilitários, e 1,5% para caminhões e ônibus. Veículos que se valorizam podem ter IPVA maior no ano seguinte.</div>
   </div>
   <div class="faq-item">
     <div class="faq-q" onclick="toggleFaq(this)">Posso consultar FIPE de motos e caminhões?</div>
@@ -462,7 +462,13 @@ function renderResultado(id,d){
   const el=document.getElementById('resultado-'+id);
   const valorStr=d.Valor||d.valor||'';
   const valor=parseFloat(valorStr.replace('R$ ','').replace(/\./g,'').replace(',','.'));
-  const ipva=isNaN(valor)?0:(valor*0.04);
+  // Alíquotas IPVA-SP (Lei 13.296/2008): caminhão/ônibus 1,5% · moto 2% · carro de passeio 4% (utilitários/picapes/vans 2%)
+  const tipo=tipoVal();
+  let aliq,aliqLabel,nota='';
+  if(tipo==='caminhoes'){aliq=0.015;aliqLabel='1,5%';}
+  else if(tipo==='motos'){aliq=0.02;aliqLabel='2%';}
+  else{aliq=0.04;aliqLabel='4%';nota='Picapes, vans e utilitários têm alíquota de 2% (R$ '+(isNaN(valor)?'0':(valor*0.02).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}))+').';}
+  const ipva=isNaN(valor)?0:(valor*aliq);
   const marca=d.Marca||d.marca||'';
   const modelo=d.Modelo||d.modelo||'';
   const ano=d.AnoModelo||d.anoModelo||'';
@@ -488,7 +494,7 @@ function renderResultado(id,d){
     </div>
     ${!isNaN(valor)&&valor>0?`
     <div class="ipva-card">
-      <div class="ipva-text">Estimativa IPVA anual (alíquota 4% SP)</div>
+      <div class="ipva-text">Estimativa IPVA anual (alíquota ${aliqLabel} SP)${nota?'<br><span style="opacity:0.7">'+nota+'</span>':''}</div>
       <div class="ipva-val">${fmtBRL(ipva)}</div>
     </div>`:''}`;
   el.classList.add('show');
