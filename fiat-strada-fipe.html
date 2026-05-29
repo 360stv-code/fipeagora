@@ -506,6 +506,13 @@ function toggleFaq(el){el.parentElement.classList.toggle('open')}
 
 /* ===== PRÉ-SELEÇÃO AUTOMÁTICA: FIAT STRADA ===== */
 window.IPVA_OVERRIDE={aliq:0.02,label:'2% · picape utilitária',nota:'Em SP, picapes utilitárias como a Strada pagam 2%, não 4%.'};
+
+function anoMaisRecente(anos){
+  let max=0;
+  (anos||[]).forEach(a=>{const n=/32000/.test(a.codigo)?99999:(parseInt(a.nome)||0);if(n>max)max=n;});
+  return max;
+}
+
 async function preSelecionar(marcaAlvo,modeloContem){
   try{
     await onTipoChange();
@@ -514,12 +521,28 @@ async function preSelecionar(marcaAlvo,modeloContem){
     sel.marca=marca;document.getElementById('marca-input').value=marca.nome;
     document.getElementById('combo-marca').classList.add('has-value');
     await onMarcaPick(marca);
+
     const alvo=norm(modeloContem);
-    let modelo=data.modelo.find(m=>norm(m.nome)===alvo)||data.modelo.find(m=>norm(m.nome).startsWith(alvo))||data.modelo.find(m=>norm(m.nome).includes(alvo));
-    if(!modelo)return;
-    sel.modelo=modelo;document.getElementById('modelo-input').value=modelo.nome;
+    const candidatos=data.modelo.filter(m=>norm(m.nome).includes(alvo));
+    if(!candidatos.length)return;
+
+    // Busca os anos de cada versão e escolhe a que tem o ano mais recente (versão mais atual)
+    let melhor=candidatos[0],melhorAno=-1;
+    const verificar=candidatos.slice(0,12); // limita p/ não sobrecarregar
+    const resultados=await Promise.all(verificar.map(async m=>{
+      try{
+        const r=await fetch(`${API}/${tipoVal()}/marcas/${marca.codigo}/modelos/${m.codigo}/anos`);
+        return{m,anos:await r.json()};
+      }catch(e){return{m,anos:[]}}
+    }));
+    resultados.forEach(({m,anos})=>{
+      const rec=anoMaisRecente(anos);
+      if(rec>melhorAno){melhorAno=rec;melhor=m;}
+    });
+
+    sel.modelo=melhor;document.getElementById('modelo-input').value=melhor.nome;
     document.getElementById('combo-modelo').classList.add('has-value');
-    await onModeloPick(modelo);
+    await onModeloPick(melhor);
     const anoInput=document.getElementById('ano-input');
     anoInput.placeholder='Escolha o ano da Strada';
     anoInput.focus();
