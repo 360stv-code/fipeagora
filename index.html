@@ -223,22 +223,22 @@ footer strong{color:var(--ink2)}
         </div>
         <div class="field">
           <label for="marca">Marca</label>
-          <select id="marca" onchange="carregarAnosPorMarca()" disabled>
+          <select id="marca" onchange="carregarModelos()" disabled>
             <option value="">Selecione o tipo</option>
           </select>
         </div>
         <div class="field">
-          <label for="ano">Ano</label>
-          <select id="ano" onchange="filtrarModelos()" disabled>
+          <label for="modelo">Modelo</label>
+          <select id="modelo" onchange="carregarAnos()" disabled>
             <option value="">Selecione a marca</option>
           </select>
         </div>
       </div>
       <div class="selects-grid two" style="margin-bottom:16px">
         <div class="field">
-          <label for="modelo">Modelo</label>
-          <select id="modelo" disabled>
-            <option value="">Selecione o ano</option>
+          <label for="ano">Ano</label>
+          <select id="ano" disabled>
+            <option value="">Selecione o modelo</option>
           </select>
         </div>
       </div>
@@ -293,7 +293,6 @@ footer strong{color:var(--ink2)}
 
 <script>
 const API='https://parallelum.com.br/fipe/api/v1';
-let _todosModelos=[];
 
 function setLoading(id,show){document.getElementById('loading-'+id).classList.toggle('show',show)}
 function setError(id,msg){const el=document.getElementById('error-'+id);el.textContent=msg||'';el.classList.toggle('show',!!msg)}
@@ -303,8 +302,8 @@ async function carregarMarcas(){
   const tipo=document.getElementById('tipo').value;
   const sel=document.getElementById('marca');
   sel.disabled=true;sel.innerHTML='<option>Carregando...</option>';
-  document.getElementById('ano').disabled=true;document.getElementById('ano').innerHTML='<option>Selecione a marca</option>';
-  document.getElementById('modelo').disabled=true;document.getElementById('modelo').innerHTML='<option>Selecione o ano</option>';
+  document.getElementById('modelo').disabled=true;document.getElementById('modelo').innerHTML='<option>Selecione a marca</option>';
+  document.getElementById('ano').disabled=true;document.getElementById('ano').innerHTML='<option>Selecione o modelo</option>';
   document.getElementById('btn-consultar').disabled=true;
   try{
     const r=await fetch(`${API}/${tipo}/marcas`);
@@ -314,57 +313,34 @@ async function carregarMarcas(){
   }catch(e){sel.innerHTML='<option>Erro ao carregar</option>';}
 }
 
-async function carregarAnosPorMarca(){
+async function carregarModelos(){
   const tipo=document.getElementById('tipo').value;
   const marca=document.getElementById('marca').value;
   if(!marca)return;
-  const selAno=document.getElementById('ano');
-  const selModelo=document.getElementById('modelo');
-  selAno.disabled=true;selAno.innerHTML='<option>Carregando...</option>';
-  selModelo.disabled=true;selModelo.innerHTML='<option>Selecione o ano</option>';
+  const sel=document.getElementById('modelo');
+  sel.disabled=true;sel.innerHTML='<option>Carregando...</option>';
+  document.getElementById('ano').disabled=true;document.getElementById('ano').innerHTML='<option>Selecione o modelo</option>';
   document.getElementById('btn-consultar').disabled=true;
   try{
-    // Busca todos os modelos da marca
     const r=await fetch(`${API}/${tipo}/marcas/${marca}/modelos`);
     const data=await r.json();
-    _todosModelos=data.modelos;
-    // Busca anos reais do primeiro modelo para ter lista atualizada
-    const rAnos=await fetch(`${API}/${tipo}/marcas/${marca}/modelos/${_todosModelos[0].codigo}/anos`);
-    const anosData=await rAnos.json();
-    // anos vêm como "2026 Gasolina" — pega só o número
-    const anosUnicos=[...new Set(anosData.map(a=>a.nome.split(' ')[0]))].sort((a,b)=>Number(b)-Number(a));
-    selAno.innerHTML='<option value="">Selecione o ano</option>'+anosUnicos.map(a=>`<option value="${a}">${a}</option>`).join('');
-    selAno.disabled=false;
-  }catch(e){selAno.innerHTML='<option>Erro ao carregar</option>';}
+    sel.innerHTML='<option value="">Selecione o modelo</option>'+data.modelos.map(m=>`<option value="${m.codigo}">${m.nome}</option>`).join('');
+    sel.disabled=false;
+  }catch(e){sel.innerHTML='<option>Erro ao carregar</option>';}
 }
 
-async function filtrarModelos(){
+async function carregarAnos(){
   const tipo=document.getElementById('tipo').value;
   const marca=document.getElementById('marca').value;
-  const ano=document.getElementById('ano').value;
-  if(!ano)return;
-  const sel=document.getElementById('modelo');
-  sel.disabled=true;sel.innerHTML='<option>Buscando modelos...</option>';
+  const modelo=document.getElementById('modelo').value;
+  if(!modelo)return;
+  const sel=document.getElementById('ano');
+  sel.disabled=true;sel.innerHTML='<option>Carregando...</option>';
   document.getElementById('btn-consultar').disabled=true;
   try{
-    // Para cada modelo verifica se tem o ano selecionado
-    const modelosComAno=[];
-    // Busca em paralelo (máx 10 por vez para não sobrecarregar)
-    const lote=_todosModelos.slice(0,Math.min(_todosModelos.length,200));
-    const checks=await Promise.all(lote.map(async m=>{
-      try{
-        const r=await fetch(`${API}/${tipo}/marcas/${marca}/modelos/${m.codigo}/anos`);
-        const anos=await r.json();
-        const temAno=anos.some(a=>a.nome.startsWith(ano));
-        return temAno?m:null;
-      }catch{return null;}
-    }));
-    const filtrados=checks.filter(Boolean);
-    if(filtrados.length>0){
-      sel.innerHTML='<option value="">Selecione o modelo</option>'+filtrados.map(m=>`<option value="${m.codigo}">${m.nome}</option>`).join('');
-    } else {
-      sel.innerHTML='<option value="">Selecione o modelo</option>'+_todosModelos.map(m=>`<option value="${m.codigo}">${m.nome}</option>`).join('');
-    }
+    const r=await fetch(`${API}/${tipo}/marcas/${marca}/modelos/${modelo}/anos`);
+    const data=await r.json();
+    sel.innerHTML='<option value="">Selecione o ano</option>'+data.map(a=>`<option value="${a.codigo}">${a.nome}</option>`).join('');
     sel.disabled=false;
     sel.onchange=()=>{document.getElementById('btn-consultar').disabled=!sel.value};
   }catch(e){sel.innerHTML='<option>Erro ao carregar</option>';}
@@ -374,16 +350,12 @@ async function consultarFipe(){
   const tipo=document.getElementById('tipo').value;
   const marca=document.getElementById('marca').value;
   const modelo=document.getElementById('modelo').value;
-  const anoFiltro=document.getElementById('ano').value;
-  if(!tipo||!marca||!modelo)return;
+  const ano=document.getElementById('ano').value;
+  if(!tipo||!marca||!modelo||!ano)return;
   setLoading('modelo',true);setError('modelo','');
   document.getElementById('resultado-modelo').classList.remove('show');
   try{
-    const rAnos=await fetch(`${API}/${tipo}/marcas/${marca}/modelos/${modelo}/anos`);
-    const anos=await rAnos.json();
-    // Tenta encontrar o ano selecionado, senão pega o primeiro
-    const anoObj=anos.find(a=>a.nome.includes(anoFiltro))||anos[0];
-    const r=await fetch(`${API}/${tipo}/marcas/${marca}/modelos/${modelo}/anos/${anoObj.codigo}`);
+    const r=await fetch(`${API}/${tipo}/marcas/${marca}/modelos/${modelo}/anos/${ano}`);
     const d=await r.json();
     setLoading('modelo',false);
     renderResultado('modelo',d);
