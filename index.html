@@ -116,19 +116,19 @@ header{padding:0 16px;border-bottom:1px solid var(--border);position:sticky;top:
 
 /* SELECTS — mobile first: 1 coluna, desktop: 3 colunas */
 .selects-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:16px}
-.field label{font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:0.07em;display:block;margin-bottom:7px}
+.field label{font-size:11px;font-weight:700;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:0.07em;display:block;margin-bottom:7px}
 select{width:100%;height:52px;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:16px;font-weight:500;color:var(--ink);padding:0 40px 0 14px;outline:none;cursor:pointer;transition:border-color 0.2s;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(255,255,255,0.3)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;-webkit-tap-highlight-color:transparent}
 select:focus{border-color:var(--accent)}
 select:disabled{opacity:0.35;cursor:not-allowed}
 
 /* COMBOBOX COM BUSCA */
 .combo{position:relative}
-.combo-input{width:100%;height:52px;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:16px;font-weight:500;color:var(--ink);padding:0 40px 0 14px;outline:none;transition:border-color 0.2s;-webkit-tap-highlight-color:transparent;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(255,255,255,0.3)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
-.combo-input::placeholder{color:var(--ink3);font-weight:400}
+.combo-input{width:100%;height:52px;background:var(--surface2);border:2px solid rgba(255,255,255,0.22);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:16px;font-weight:600;color:#fff;padding:0 40px 0 14px;outline:none;transition:border-color 0.2s;-webkit-tap-highlight-color:transparent;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(255,255,255,0.55)' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+.combo-input::placeholder{color:rgba(255,255,255,0.5);font-weight:400}
 .combo-input:focus{border-color:var(--accent)}
-.combo-input:disabled{opacity:0.35;cursor:not-allowed}
+.combo-input:disabled{opacity:0.4;cursor:not-allowed}
 .combo.open .combo-input{border-color:var(--accent);border-bottom-left-radius:0;border-bottom-right-radius:0}
-.combo-list{display:none;position:absolute;top:100%;left:0;right:0;z-index:50;background:var(--surface2);border:1.5px solid var(--accent);border-top:none;border-radius:0 0 var(--radius-sm) var(--radius-sm);max-height:240px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.combo-list{display:none;position:absolute;top:100%;left:0;right:0;z-index:50;background:var(--surface2);border:2px solid var(--accent);border-top:none;border-radius:0 0 var(--radius-sm) var(--radius-sm);max-height:240px;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .combo.open .combo-list{display:block}
 .combo-opt{padding:13px 14px;font-size:15px;color:var(--ink);cursor:pointer;border-bottom:1px solid var(--border2);-webkit-tap-highlight-color:transparent}
 .combo-opt:last-child{border-bottom:none}
@@ -407,12 +407,26 @@ function resetFrom(level){
   document.getElementById('btn-consultar').disabled=true;
 }
 
+/* ===== CACHE DE BUSCA (memória + sessionStorage) ===== */
+const _memCache={};
+async function cachedFetch(url){
+  if(_memCache[url])return _memCache[url];
+  let stored=null;
+  try{const s=sessionStorage.getItem('fipe:'+url);if(s)stored=JSON.parse(s);}catch(e){}
+  if(stored){_memCache[url]=stored;return stored;}
+  const r=await fetch(url);
+  const d=await r.json();
+  _memCache[url]=d;
+  try{sessionStorage.setItem('fipe:'+url,JSON.stringify(d));}catch(e){}
+  return d;
+}
+
 /* ===== CARREGAMENTO API ===== */
 async function onTipoChange(){
   cMarca.loading();resetFrom(1);
   try{
-    const r=await fetch(`${API}/${tipoVal()}/marcas`);
-    cMarca.set(await r.json(),'Buscar marca...');
+    const d=await cachedFetch(`${API}/${tipoVal()}/marcas`);
+    cMarca.set(d,'Buscar marca...');
   }catch(e){cMarca.set([],'Erro ao carregar');}
 }
 
@@ -421,8 +435,7 @@ async function onMarcaPick(m){
   if(!m)return;
   cModelo.loading();
   try{
-    const r=await fetch(`${API}/${tipoVal()}/marcas/${m.codigo}/modelos`);
-    const d=await r.json();
+    const d=await cachedFetch(`${API}/${tipoVal()}/marcas/${m.codigo}/modelos`);
     cModelo.set(d.modelos,'Buscar modelo...');
   }catch(e){cModelo.set([],'Erro ao carregar');}
 }
@@ -432,8 +445,7 @@ async function onModeloPick(m){
   if(!m)return;
   cAno.loading();
   try{
-    const r=await fetch(`${API}/${tipoVal()}/marcas/${sel.marca.codigo}/modelos/${m.codigo}/anos`);
-    let anos=await r.json();
+    let anos=await cachedFetch(`${API}/${tipoVal()}/marcas/${sel.marca.codigo}/modelos/${m.codigo}/anos`);
     anos=anos.map(a=>{
       // a API marca veiculo 0km com o ano "32000"
       const zeroKm=/^32000/.test(a.codigo)||/32000/.test(a.nome);
@@ -446,16 +458,21 @@ async function onModeloPick(m){
 
 function onAnoPick(a){document.getElementById('btn-consultar').disabled=!a}
 
+let _consultando=false;
 async function consultarFipe(){
-  if(!sel.marca||!sel.modelo||!sel.ano)return;
+  if(_consultando||!sel.marca||!sel.modelo||!sel.ano)return;
+  _consultando=true;
+  const btn=document.getElementById('btn-consultar');
+  btn.disabled=true;
   setLoading('modelo',true);setError('modelo','');
   document.getElementById('resultado-modelo').classList.remove('show');
   try{
-    const r=await fetch(`${API}/${tipoVal()}/marcas/${sel.marca.codigo}/modelos/${sel.modelo.codigo}/anos/${sel.ano.codigo}`);
-    const d=await r.json();
+    const d=await cachedFetch(`${API}/${tipoVal()}/marcas/${sel.marca.codigo}/modelos/${sel.modelo.codigo}/anos/${sel.ano.codigo}`);
     setLoading('modelo',false);
     renderResultado('modelo',d);
   }catch(e){setLoading('modelo',false);setError('modelo','Não foi possível buscar os dados. Tente novamente.');}
+  _consultando=false;
+  btn.disabled=false;
 }
 
 function renderResultado(id,d){
