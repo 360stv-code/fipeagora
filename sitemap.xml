@@ -11,6 +11,16 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://fipeagora.com.br/vw-polo-fipe.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://fipeagora.com.br/hyundai-hb20-fipe.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://fipeagora.com.br/privacidade.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
