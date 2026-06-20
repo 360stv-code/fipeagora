@@ -1,0 +1,32 @@
+# FIPE Agora
+
+> Consulta gratuita e rápida da Tabela FIPE de carros, motos e caminhões no Brasil, com cálculo automático de IPVA por tipo de veículo e estado de São Paulo. Dados oficiais atualizados mensalmente, sem cadastro.
+
+FIPE Agora (fipeagora.com.br) é uma ferramenta independente desenvolvida pela Lisboa Solutions. Permite consultar o preço médio de mercado de veículos (valor FIPE) por marca, modelo e ano, e estima o IPVA com base nas alíquotas oficiais de São Paulo.
+
+## Principais recursos
+- Consulta de valor FIPE de carros, motos e caminhões por marca, modelo e ano
+- Busca com filtro em tempo real (digite o nome do veículo)
+- Cálculo automático de IPVA por tipo: carros 4%, motos e utilitários 2%, caminhões 1,5% (São Paulo)
+- Identificação de veículos 0 km
+- Dados atualizados mensalmente conforme a Tabela FIPE oficial
+
+## Páginas de consulta por modelo
+- [Tabela FIPE Fiat Strada](https://fipeagora.com.br/fiat-strada-fipe.html): preço da picape mais vendida do Brasil, IPVA 2% (utilitário em SP)
+- [Tabela FIPE VW Polo](https://fipeagora.com.br/vw-polo-fipe.html): preço do hatch mais vendido do Brasil
+- [Tabela FIPE Hyundai HB20](https://fipeagora.com.br/hyundai-hb20-fipe.html): preço de um dos hatches mais vendidos
+- [Tabela FIPE Honda CG 160](https://fipeagora.com.br/honda-cg-160-fipe.html): preço da moto mais vendida do Brasil
+- [Tabela FIPE Honda Biz 125](https://fipeagora.com.br/honda-biz-125-fipe.html): preço da segunda moto mais vendida
+- [Tabela FIPE Honda Pop 110i](https://fipeagora.com.br/honda-pop-110i-fipe.html): preço de uma das motos mais econômicas
+
+## IPVA São Paulo
+- [Calcular IPVA São Paulo 2026](https://fipeagora.com.br/ipva-sao-paulo.html): alíquotas oficiais, isenção de motos até 180cc e de veículos com mais de 20 anos, cálculo pela Tabela FIPE
+
+## Fatos úteis
+- O valor FIPE é a média nacional de referência; o preço real varia conforme conservação, quilometragem, opcionais e região.
+- Em São Paulo (2026), motos até 180cc são isentas de IPVA, assim como veículos fabricados em 2005 ou antes.
+- A Tabela FIPE é atualizada mensalmente.
+
+## Contato
+- Desenvolvido por Lisboa Solutions
+- Site: https://fipeagora.com.br
